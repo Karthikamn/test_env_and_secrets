@@ -2,7 +2,7 @@
   "name":"my-static-site",
   "version":"1.0.0",
   "scripts": {
-    "build": "mkdir -p build && cp -r src/* build/"
+    "build": "node build.js"
   },
   "dependencies": {}
 }
