@@ -11,7 +11,7 @@ jobs:
  # Setting environment variables at the job level
    env: 
     DEPLOY_ENV: production 
-    S3_BUCKET: my-production-bucket 
+    SITE_TITLE: "MY STATIC SITE" 
    steps: 
     - name: Checkout code
       uses: actions/checkout@v3
@@ -22,12 +22,13 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Build the project 
-      run: npm run build 
-    - name: Deploy to S3 
-      env:
-       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-      run: | 
-       echo "Deploying to $S3_BUCKET in $DEPLOY_ENV environment"
-       npm install -g aws-cli
-       aws s3 sync ./build s3://$S3_BUCKET --delete
+      run: |
+       echo "Building for $DEPLOY_ENV environment"
+       echo "Site title is $SITE_TITLE"
+       npm run build
+    - name: Deploy to github pages 
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+       github_token: ${{ secrets.GITHUB_TOKEN}}
+       publish_dir: ./build
+        
